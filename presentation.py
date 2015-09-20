@@ -45,10 +45,12 @@ class Presentation(object):
         "Save as pdf"
         from matplotlib.backends.backend_pdf import PdfPages
         pdf_pages = PdfPages(fname)
+        pdf_pages.savefig()
         tmp = self.current_slide
         for i, s in enumerate(self.slides):
             self.current_slide = i
             self.draw()
+            self.fig.savefig('bla%d.pdf'%i ,facecolor=BACKGROUND)
             pdf_pages.savefig(self.fig, facecolor=BACKGROUND)
         pdf_pages.close()
         self.current_slide = tmp

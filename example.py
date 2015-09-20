@@ -120,5 +120,5 @@ slide.add_content(enumerated_text(t, (l['content.left'], l['content.top'])))
 presentation.add_slide(slide)
 
 
-presentation.to_pdf('example.pdf')
-plt.show()
+#plt.show()
+presentation.to_pdf('example2.pdf')

@@ -41,12 +41,14 @@ def add_image(img_path, pos, va='bottom', ha='left', transform=None, zoom=1):
         fig, ax = slide.fig, slide.def_ax
         image = plt.imread(img_path)
         w, h = image.shape[:2]
-        ob = OffsetImage(image, zoom=zoom, dpi_cor=False)
-        w, h, x, d =  ob.get_extent(renderer())
-        tw, th = fig.get_size_inches()*fig.dpi
+        ob = OffsetImage(image, zoom=zoom)
+        rend = fig.canvas.get_renderer()
+        w, h, x, d =  ob.get_extent(rend)
+        print 
+        print(w, h, x, d, fig.canvas )
 
         if transform is None:
-            trans = fig.transFigure
+            trans = ax.transAxes
         else:
             trans = transform
         pix_pos = trans.transform(pos)
@@ -64,9 +66,9 @@ def add_image(img_path, pos, va='bottom', ha='left', transform=None, zoom=1):
             y_pos = pix_pos[1] - h/2.
         else:
             y_pos = pix_pos[1]
-
+        print(x_pos, y_pos)
         ob.set_offset([x_pos, y_pos])
-        fig.artists.append(ob)
+        ax.add_artist(ob)
     return f
 
 #__all__ = [add_text, add_image, enumerated_text]
