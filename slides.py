@@ -3,32 +3,23 @@
 Contains the slide classes
 """
 import matplotlib.pyplot as plt
+import collections
 from styles import *
-
-PIXEL_SIZE = (1280, 1024)
-DPI = 96.
-ZOOM = 0.5
-SIZE_INCH = PIXEL_SIZE[0]/DPI, PIXEL_SIZE[1]/DPI
-BACKGROUND = 'white'
-
-def renderer():
-    plt.gcf().canvas.renderer
-
 
 class Slide(object):
     "Basic slide object"
-
     background_funcs = []
 
     def __init__(self, name=''):
-        self.fig = plt.figure(figsize=SIZE_INCH, facecolor=BACKGROUND,
-                              dpi=DPI)
-
-        #self.fig.canvas.mpl_connect('resize_event', lambda x: self.draw())
         self.content = []
+    
+    def add_content(self, c):
+        if not isinstance(c, collections.Iterable):
+            c = [c]
+        self.content+= c
 
     def draw_background(self):
-        for f in self.background_funcs:
+        for f in self.background:
             f(self)
 
     def draw_foreground(self):
@@ -36,6 +27,9 @@ class Slide(object):
             f(self)
 
     def draw(self):
+        if not hasattr(self, 'fig'):
+            fsettings = dict(figsize=SIZE_INCH, facecolor=BACKGROUND, dpi=DPI)
+            self.fig = plt.figure(**fsettings)
         self.fig.clear()
         self.def_ax = self.fig.add_axes([0, 0, 1, 1])
         self.def_ax.set_axis_off()
@@ -44,17 +38,24 @@ class Slide(object):
 
 
 class NormalSlide(Slide):
-    "Basic content slide with title"
+    "Basic content slide with title and optional subtitle"
 
-    def __init__(self, slide_title, name=''):
+    def __init__(self, slide_title, slide_subtitle=None, name=''):
         super(NormalSlide, self).__init__(name=name)
         self.slide_title = slide_title
+        self.slide_subtitle = slide_subtitle
         self.left_content = []
 
     def draw_foreground(self):
         super(NormalSlide, self).draw_foreground()
-        self.title = self.fig.text(0.04, 0.8, self.slide_title,
+        xpos, ypos = layout['title.pos']
+        self.title = self.fig.text(xpos, ypos, self.slide_title,
                                    big_title_style, va='bottom', ha='left')
+        if self.slide_subtitle is not None:
+                    self.title = self.fig.text(xpos, ypos, self.slide_subtitle,
+                                   sub_title_style, va='top', ha='left')
+
+
 
 
 class TitleSlide(Slide):
@@ -67,7 +68,8 @@ class TitleSlide(Slide):
         self.subtitle_text = subtitle
 
     def draw_foreground(self):
-
+        super(TitleSlide, self).draw_foreground()
+        x, y = layout['bigtitle.pos']
         self.title = self.fig.text(0.5, 0.5, self.title_text, big_title_style,
                                    va='bottom')
         if self.subtitle_text is not None:
