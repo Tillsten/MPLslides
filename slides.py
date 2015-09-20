@@ -12,7 +12,7 @@ class Slide(object):
 
     def __init__(self, name=''):
         self.content = []
-    
+
     def add_content(self, c):
         if not isinstance(c, collections.Iterable):
             c = [c]
@@ -70,9 +70,9 @@ class TitleSlide(Slide):
     def draw_foreground(self):
         super(TitleSlide, self).draw_foreground()
         x, y = layout['bigtitle.pos']
-        self.title = self.fig.text(0.5, 0.5, self.title_text, big_title_style,
+        self.title = self.fig.text(x, y, self.title_text, big_title_style,
                                    va='bottom')
         if self.subtitle_text is not None:
-            self.sub_title = self.fig.text(0.5, 0.5, self.subtitle_text,
+            self.sub_title = self.fig.text(x, y, self.subtitle_text,
                                            sub_title_style)
 
