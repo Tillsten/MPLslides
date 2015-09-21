@@ -3,7 +3,7 @@
 import matplotlib.pyplot as plt
 import matplotlib.transforms as transforms
 import numpy as np
-from matplotlib.offsetbox import OffsetImage
+from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 
 from styles import *
 
@@ -41,34 +41,16 @@ def add_image(img_path, pos, va='bottom', ha='left', transform=None, zoom=1):
         fig, ax = slide.fig, slide.def_ax
         image = plt.imread(img_path)
         w, h = image.shape[:2]
+
+
         ob = OffsetImage(image, zoom=zoom)
-        rend = fig.canvas.get_renderer()
-        w, h, x, d =  ob.get_extent(rend)
-        print 
-        print(w, h, x, d, fig.canvas )
 
-        if transform is None:
-            trans = ax.transAxes
-        else:
-            trans = transform
-        pix_pos = trans.transform(pos)
+        xalign = dict(left=0, center=0.5, right=1)
+        yalign = dict(bottom=0, center=0.5, right=1)
+        a, b = xalign[ha], yalign[va]
+        ab = AnnotationBbox(ob, pos, frameon=0, pad=0.0, box_alignment=(a, b))
 
-        if ha == 'right':
-            x_pos = pix_pos[0] - w
-        elif ha == 'center':
-            x_pos = pix_pos[0] - w/2.
-        else:
-            x_pos = pix_pos[0]
-
-        if va == 'top':
-            y_pos = pix_pos[1] - h
-        elif va == 'center':
-            y_pos = pix_pos[1] - h/2.
-        else:
-            y_pos = pix_pos[1]
-        print(x_pos, y_pos)
-        ob.set_offset([x_pos, y_pos])
-        ax.add_artist(ob)
+        ax.add_artist(ab)
     return f
 
 #__all__ = [add_text, add_image, enumerated_text]

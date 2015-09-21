@@ -49,7 +49,10 @@ class Presentation(object):
         for i, s in enumerate(self.slides):
             self.current_slide = i
             self.draw()
-            pdf_pages.savefig(self.fig, facecolor=BACKGROUND)
+            pdf_pages.savefig(self.fig,
+                              facecolor=BACKGROUND,
+                              dpi=DPI,
+                              pad_inches=0)
         pdf_pages.close()
         self.current_slide = tmp
         self.draw()
