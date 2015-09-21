@@ -51,15 +51,15 @@ enum_style.update({
 enum_char_style = {
   'fontsize': 15,
   'fontweight': 'normal',
-  'fontname': 'DejaVu Sans',
+  'fontname': 'StixGeneral',
   'color': enum_style['color'],
   'ha': 'left',
   'va': 'top',
-  }  
+  }
 
 layout = {
   'title.pos': (0.05, 0.85),
-  'bigtitle.pos': (0.5, 0.5),   
+  'bigtitle.pos': (0.5, 0.5),
   'content.top': 0.75,
   'content.bottom': 0.05,
   'content.right': 0.9,
@@ -67,6 +67,6 @@ layout = {
   'content.hcenter': 0.5,
   'content.vcenter': 0.75/2.,
   'enum.offset': (0.01),
-  'enum.y_adv': 30,
-  
+  'enum.y_adv': 40,
+
   }
