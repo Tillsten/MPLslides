@@ -5,9 +5,9 @@ Created on Sun Sep 20 21:21:40 2015
 @author: Tillsten
 """
 
-from content import enumerated_text, add_image, add_text
-from presentation import Presentation
-from slides import TitleSlide, NormalSlide
+from mplslides.content import enumerated_text, add_image, add_text
+from mplslides.presentation import Presentation
+from mplslides.slides import TitleSlide, NormalSlide
 import matplotlib.pyplot as plt
 
 pres = Presentation()

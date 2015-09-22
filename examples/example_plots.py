@@ -53,7 +53,7 @@ def sine_plot(slide):
         ax = slide.fig.add_axes([0.07, 0.45, 0.33, 0.3])
         plot_income(ax)
         ax.set_title('Household income USA')
-        ax2 = slide.fig.add_axes([0.07, 0.07, 0.4, 0.3])
+        ax2 = slide.fig.add_axes([0.07, 0.07, 0.33, 0.3])
         def fcn(x, y):
             return (1 - x / 2 + x ** 5 + y ** 3) * np.exp(-x ** 2 - y ** 2)
         n = 20
@@ -61,3 +61,35 @@ def sine_plot(slide):
         y = np.linspace(-3, 3, 3 * n)
         X, Y = np.meshgrid(x, y)
         ax2.contourf(fcn(X, Y), 20, cmap='bone', aspect='auto')
+        
+
+def animated_plot():
+    def f(slide):
+        fig, ax = slide.fig, slide.def_ax
+        with plt.style.context('dark_background'):
+            ax = fig.add_axes([0.1, 0.15, 0.8, 0.6])
+            x = np.linspace(0, 50, 500)
+            l, = ax.plot([], [])
+        interval = 1000/26
+        ax.set_xlim(0, 50)
+        ax.set_ylim(-1, 1)        
+        fig.canvas.draw()
+        slide.back = fig.canvas.copy_from_bbox(ax.bbox)         
+        #No nonlocal in py2
+        class Nonlocal:
+            t = 0
+        
+        def update():
+            Nonlocal.t = Nonlocal.t + interval
+            t = Nonlocal.t
+            y = .5*np.sin(x*t/100.) + .5*np.sin(x + 1.1*t/100.)
+            l.set_data(x, y)  
+            fig.canvas.restore_region(slide.back)
+            ax.draw_artist(l)
+            fig.canvas.blit(ax.bbox)
+            
+        slide.timer = fig.canvas.new_timer(interval=50)
+        slide.timer.add_callback(update)
+        slide.timer.start()
+    return f
+        

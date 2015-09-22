@@ -26,14 +26,20 @@ class Presentation(object):
         self.slides.append(slide)
 
     def next_slide(self, event):
+        if event.key in ('left', 'right'):
+            last_slide = self.slides[self.current_slide]
+            if hasattr(last_slide, 'timer'):                
+                    last_slide.timer.stop() 
         if event.key == 'right':
+
+           
             self.current_slide = (self.current_slide + 1)%len(self.slides)
             self.draw()
         if event.key == 'left':
             self.current_slide = (self.current_slide - 1)%len(self.slides)
             self.draw()
 
-    def draw(self):
+    def draw(self):        
         if len(self.slides) > 0:
             slide = self.slides[self.current_slide]
             slide.fig = self.fig
