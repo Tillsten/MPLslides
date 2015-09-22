@@ -67,6 +67,6 @@ layout = {
   'content.hcenter': 0.5,
   'content.vcenter': 0.75/2.,
   'enum.offset': (0.01),
-  'enum.y_adv': 35,
+  'enum.y_adv': 38,
 
   }

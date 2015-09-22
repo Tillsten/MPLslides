@@ -43,6 +43,7 @@ a = ['Pictures!',
      'Axes!',
      'Enumerated text!',
      '..which was harder\nthan its sounds.',
+     r'$e^{ \pm i\theta } = \cos \theta \pm i\sin \theta$',
      'PDF export!']
 slide.add_content(enumerated_text(a, (0.5, 0.7)))
 slide.add_content(sine_plot)
@@ -98,11 +99,11 @@ t = ['One could directly use Latex for\ntext processing.',
      'Appearing and disapperaing elements\nshould also be quite doable.',
      'More content fuctions, smarter Layout.']
 
-txt = enumerated_text(t, (l['content.left'], l['content.top']), fontsize=25)
+txt = enumerated_text(t, (l['content.left'], l['content.top']), fontsize=28)
 slide.add_content(txt)
 presentation.add_slide(slide)
 
-slide = TitleSlide('Conculsion', 'For amout of code, it is quite awesome!')
+slide = TitleSlide('Personal conculsion', 'For the amout of code, it is quite awesome!')
 presentation.add_slide(slide)
 
 
