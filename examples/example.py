@@ -97,7 +97,7 @@ t = ['One could directly use Latex for\ntext processing.',
      'Make a fancier text class, with\nsupport for simple formatting.',
      'AUTOMATIC LINE BREAKS!',
      'Appearing and disapperaing elements\nshould also be quite doable.',
-     'More content fuctions, smarter Layout.']
+     'More content functions, smarter layout.']
 
 txt = enumerated_text(t, (l['content.left'], l['content.top']), fontsize=28)
 slide.add_content(txt)
