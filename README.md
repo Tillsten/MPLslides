@@ -1,6 +1,8 @@
-# MPLslides
+#Readme
+
+![MPLslides](https://github.com/Tillsten/MPLslides/raw/master/examples/mplslides.png)
+
 by Till Stensitzki
-![](https://github.com/Tillsten/MPLslides/raw/master/examples/mplslides.png)
 ##Introduction 
 
 Hacked together python presentation framework using only matplotlib.
