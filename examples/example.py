@@ -103,7 +103,7 @@ txt = enumerated_text(t, (l['content.left'], l['content.top']), fontsize=28)
 slide.add_content(txt)
 presentation.add_slide(slide)
 
-slide = TitleSlide('Personal conculsion', 'For the amout of code, it is quite awesome!')
+slide = TitleSlide('Personal conclusion', 'For the amout of code, it is quite awesome!')
 presentation.add_slide(slide)
 
 
