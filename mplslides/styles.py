@@ -5,34 +5,35 @@ Created on Sat Sep 19 18:26:43 2015
 @author: Tillsten
 """
 import matplotlib.pyplot as plt
+from cascadict import CascaDict
+
+
 
 plt.rcParams['font.family'] = 'Sans'
 plt.rcParams['toolbar'] = 'None'
 
 
-PIXEL_SIZE = (1280, 1024)
-DPI = 120.
-ZOOM = 0.5
-SIZE_INCH = PIXEL_SIZE[0]/DPI, PIXEL_SIZE[1]/DPI
-BACKGROUND = (0.1, 0.1, 0.1)
-plt.rcParams['savefig.dpi'] = DPI
+figure_settings = dict(PIXEL_SIZE = (1280, 1024),
+                       DPI = 120.,
+                       ZOOM = 0.5,
+                       color = (0.1, 0.1, 0.1))
 
 ENUM_CHAR = u'■'
 
-text_style = {
+text_style = CascaDict()
+text_style.update({
   'fontsize': 24,
   'color': 'w',
+})
 
-}
-
-big_title_style = text_style.copy()
+big_title_style = text_style.cascade()
 big_title_style.update({
   'fontsize': 54,
   'fontweight': 'bold',
   'ha': 'center',
   'va': 'center'})
 
-sub_title_style = text_style.copy()
+sub_title_style = text_style.cascade()
 sub_title_style.update({
   'fontsize': 30,
   'fontweight': 'normal',
@@ -40,16 +41,16 @@ sub_title_style.update({
   'va': 'top'})
 
 
-enum_style = text_style.copy()
+enum_style = text_style.cascade()
 enum_style.update({
-  'fontsize': 30,
+  'fontsize': 28,
   'fontweight': 'normal',
   'ha': 'left',
   'va': 'top',
   })
 
 enum_char_style = {
-  'fontsize': 15,
+  'fontsize': 11,
   'fontweight': 'normal',
   'fontname': 'StixGeneral',
   'color': enum_style['color'],
@@ -67,6 +68,7 @@ layout = {
   'content.hcenter': 0.5,
   'content.vcenter': 0.75/2.,
   'enum.offset': (0.01),
-  'enum.y_adv': 38,
+  'enum.y_adv': enum_char_style['fontsize']*1,
+  'enum.indent': enum_char_style['fontsize']*4,
 
   }

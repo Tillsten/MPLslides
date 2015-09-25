@@ -9,9 +9,12 @@ from styles import *
 class Slide(object):
     "Basic slide object"
     background_funcs = []
+    autoregister_pres = None
 
     def __init__(self, name=''):
         self.content = []
+        if Slide.autoregister_pres is not None:
+            Slide.autoregister_pres.add_slide(self)
 
     def add_content(self, c):
         if not isinstance(c, collections.Iterable):

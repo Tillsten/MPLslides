@@ -61,7 +61,7 @@ def sine_plot(slide):
         y = np.linspace(-3, 3, 3 * n)
         X, Y = np.meshgrid(x, y)
         ax2.contourf(fcn(X, Y), 20, cmap='bone', aspect='auto')
-        
+
 
 def animated_plot():
     def f(slide):
@@ -69,27 +69,26 @@ def animated_plot():
         with plt.style.context('dark_background'):
             ax = fig.add_axes([0.1, 0.15, 0.8, 0.6])
             x = np.linspace(0, 50, 500)
-            l, = ax.plot([], [])
+            l, = ax.plot([], [], animated=True)
         interval = 1000/26
         ax.set_xlim(0, 50)
-        ax.set_ylim(-1, 1)        
+        ax.set_ylim(-1, 1)
         fig.canvas.draw()
-        slide.back = fig.canvas.copy_from_bbox(ax.bbox)         
+        slide.back = fig.canvas.copy_from_bbox(ax.bbox)
         #No nonlocal in py2
         class Nonlocal:
             t = 0
-        
+
         def update():
             Nonlocal.t = Nonlocal.t + interval
             t = Nonlocal.t
-            y = .5*np.sin(x*t/100.) + .5*np.sin(x + 1.1*t/100.)
-            l.set_data(x, y)  
+            y = .5*np.sin(x + t/100.) + .5*np.sin(x + 1.05*t/100.)
+            l.set_data(x, y)
             fig.canvas.restore_region(slide.back)
             ax.draw_artist(l)
-            fig.canvas.blit(ax.bbox)
-            
-        slide.timer = fig.canvas.new_timer(interval=50)
+            fig.canvas.update()
+
+        slide.timer = fig.canvas.new_timer(interval=interval)
         slide.timer.add_callback(update)
         slide.timer.start()
     return f
-        
