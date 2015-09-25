@@ -5,7 +5,7 @@ Contains the slide classes
 import matplotlib.pyplot as plt
 import collections
 from styles import *
-
+from content import *
 class Slide(object):
     "Basic slide object"
     background_funcs = []
@@ -69,13 +69,13 @@ class TitleSlide(Slide):
         super(TitleSlide, self).__init__(name)
         self.title_text = title
         self.subtitle_text = subtitle
+        self.add_content(add_text(title, layout['bigtitle.pos'],
+                                  big_title_style, linewidth=35))
+        if subtitle is not None:
+            self.add_content(add_text(subtitle, layout['bigtitle.pos'],
+                                      sub_title_style, linewidth=50))
 
-    def draw_foreground(self):
-        super(TitleSlide, self).draw_foreground()
-        x, y = layout['bigtitle.pos']
-        self.title = self.fig.text(x, y, self.title_text, big_title_style,
-                                   va='bottom')
-        if self.subtitle_text is not None:
-            self.sub_title = self.fig.text(x, y, self.subtitle_text,
-                                           sub_title_style)
+
+
+
 

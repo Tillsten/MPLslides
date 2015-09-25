@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.transforms as transforms
 import numpy as np
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
-
+import textwrap
 from styles import *
 
 class MyOffsetImage(OffsetImage):
@@ -24,6 +24,7 @@ def renderer():
 
 def enumerated_text(txt_list, pos, **kwargs):
     "Add an enumerated text to slide."
+    linewidth = kwargs.pop('linewidth', layout['enum.linewidth'])
     def f(slide):
         fig, ax = slide.fig, slide.def_ax
         if isinstance(pos, str):
@@ -31,25 +32,33 @@ def enumerated_text(txt_list, pos, **kwargs):
         else:
             x0, cur_y = pos
         tr = ax.transAxes.inverted()
-        xi, yi  = tr.transform_point([layout['enum.indent'], layout['enum.y_adv']])
+        xi, yi  = tr.transform_point([layout['enum.indent'],
+                                      layout['enum.y_adv']])
         for txt in txt_list:
-            t = ax.text(x0 + xi, cur_y, txt, enum_style,
-                        transform=ax.transAxes,  **kwargs)
-
-            t_symbol = ax.text(x0, cur_y-layout['enum.offset'], ENUM_CHAR,
-                               enum_char_style, transform=ax.transAxes)
+            if isinstance(txt, str):
+                t = ax.text(x0 + xi, cur_y, textwrap.fill(txt, width=linewidth),
+                            enum_style, transform=ax.transAxes, **kwargs)
+                t_symbol = ax.text(x0, cur_y-layout['enum.offset'], ENUM_CHAR,
+                                   enum_char_style, transform=ax.transAxes)
+            else:
+                my_style = enum_style.cascade(parse_format_str(txt[1]))
+                t = ax.text(x0, cur_y, txt[0], my_style,
+                            transform=ax.transAxes,  **kwargs)
             t_size_pixel = t.get_window_extent(renderer())
             t_size = ax.transAxes.inverted().transform_bbox(t_size_pixel)
 
             cur_y = cur_y - t_size.height - yi
     return f
 
-def add_text(txt, pos, **kwargs):
+def add_text(txt, pos, style=text_style, **kwargs):
     "Add text to the slide"
+    linewidth = kwargs.pop('linewidth', 35)
     def f(slide):
         fig, ax = slide.fig, slide.def_ax
-        ax.text(pos[0], pos[1], txt, text_style, **kwargs)
+        ax.text(pos[0], pos[1], textwrap.fill(txt, width=linewidth),
+                style, **kwargs)
     return f
+
 
 def add_image(img_path, pos, va='bottom', ha='left', transform=None, zoom=1):
     "Add image to the slide"
@@ -65,5 +74,22 @@ def add_image(img_path, pos, va='bottom', ha='left', transform=None, zoom=1):
         ax.add_artist(ab)
     return f
 
+def parse_format_str(s):
+    """Parse a str to fontproperties which will be returned as a dict.
+
+    b is bold, i is italic, s is semibold, a number will be used
+    as fontsize.
+    """
+    out = {}
+    if s.count("b"):
+        out['fontweight'] = 'bold'
+    if s.count("s"):
+        out['fontweight'] = 'semibold'
+    if s.count("i"):
+        out['fontstyle'] = 'italic'
+    number = "".join([c for c in s if c in '1234567890'])
+    if  number != '':
+        out['fontsize'] = int(number)
+    return out
 
 #__all__ = [add_text, add_image, enumerated_text]

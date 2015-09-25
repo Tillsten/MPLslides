@@ -31,7 +31,7 @@ big_title_style.update({
   'fontsize': 54,
   'fontweight': 'bold',
   'ha': 'center',
-  'va': 'center'})
+  'va': 'bottom'})
 
 sub_title_style = text_style.cascade()
 sub_title_style.update({
@@ -50,7 +50,7 @@ enum_style.update({
   })
 
 enum_char_style = {
-  'fontsize': 11,
+  'fontsize': enum_style['fontsize']/2-2,
   'fontweight': 'normal',
   'fontname': 'StixGeneral',
   'color': enum_style['color'],
@@ -61,14 +61,15 @@ enum_char_style = {
 layout = {
   'title.pos': (0.05, 0.85),
   'bigtitle.pos': (0.5, 0.5),
-  'content.top': 0.75,
+  'content.top': 0.78,
   'content.bottom': 0.05,
   'content.right': 0.9,
   'content.left': 0.1,
   'content.hcenter': 0.5,
   'content.vcenter': 0.75/2.,
   'enum.offset': (0.01),
-  'enum.y_adv': enum_char_style['fontsize']*1,
+  'enum.y_adv': enum_char_style['fontsize']*0.9,
   'enum.indent': enum_char_style['fontsize']*4,
+  'enum.linewidth': 24
 
   }
