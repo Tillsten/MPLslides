@@ -13,9 +13,9 @@ plt.rcParams['font.family'] = 'Sans'
 plt.rcParams['toolbar'] = 'None'
 
 
-figure_settings = dict(PIXEL_SIZE = (1280, 1024),
-                       DPI = 120.,
-                       ZOOM = 0.5,
+figure_settings = dict(pixel_size = (1280, 1024),
+                       dpi = 120.,
+                       zoom = 0.5,
                        color = (0.1, 0.1, 0.1))
 
 ENUM_CHAR = u'■'
@@ -43,7 +43,7 @@ sub_title_style.update({
 
 enum_style = text_style.cascade()
 enum_style.update({
-  'fontsize': 28,
+  'fontsize': 30,
   'fontweight': 'normal',
   'ha': 'left',
   'va': 'top',
@@ -60,6 +60,8 @@ enum_char_style = {
 
 layout = {
   'title.pos': (0.05, 0.85),
+  'title.width': 35,
+  'subtitle.width': 40,
   'bigtitle.pos': (0.5, 0.5),
   'content.top': 0.78,
   'content.bottom': 0.05,
@@ -68,8 +70,8 @@ layout = {
   'content.hcenter': 0.5,
   'content.vcenter': 0.75/2.,
   'enum.offset': (0.01),
-  'enum.y_adv': enum_char_style['fontsize']*0.9,
+  'enum.y_adv': enum_char_style['fontsize']*0.95,
   'enum.indent': enum_char_style['fontsize']*4,
-  'enum.linewidth': 24
+  'enum.linewidth': 21
 
   }

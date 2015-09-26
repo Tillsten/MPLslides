@@ -7,6 +7,8 @@ from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 import textwrap
 from styles import *
 
+from functools import wraps
+
 class MyOffsetImage(OffsetImage):
     def get_extent(self, renderer):
         if self._dpi_cor:
@@ -19,9 +21,22 @@ class MyOffsetImage(OffsetImage):
         w, h = nx * zoom, ny * zoom
         return w, h, 0, 0
 
+autoadd = True
+last_slide = None
+
 def renderer():
     return plt.gcf().canvas.get_renderer()
 
+def autoadd(func):
+    @wraps(func)
+    def f(*args, **kwargs):
+        out = func(*args, **kwargs)
+        if autoadd and last_slide:
+            last_slide.add_content(out)
+        return out
+    return f
+
+@autoadd
 def enumerated_text(txt_list, pos, **kwargs):
     "Add an enumerated text to slide."
     linewidth = kwargs.pop('linewidth', layout['enum.linewidth'])
@@ -32,7 +47,7 @@ def enumerated_text(txt_list, pos, **kwargs):
         else:
             x0, cur_y = pos
         tr = ax.transAxes.inverted()
-        xi, yi  = tr.transform_point([layout['enum.indent'],
+        xi, yi = tr.transform_point([layout['enum.indent'],
                                       layout['enum.y_adv']])
         for txt in txt_list:
             if isinstance(txt, str):
@@ -48,18 +63,22 @@ def enumerated_text(txt_list, pos, **kwargs):
             t_size = ax.transAxes.inverted().transform_bbox(t_size_pixel)
 
             cur_y = cur_y - t_size.height - yi
+
     return f
 
+@autoadd
 def add_text(txt, pos, style=text_style, **kwargs):
     "Add text to the slide"
-    linewidth = kwargs.pop('linewidth', 35)
+    linewidth = kwargs.pop('linewidth', None)
+    if linewidth:
+        txt = textwrap.fill(txt, width=linewidth)
     def f(slide):
         fig, ax = slide.fig, slide.def_ax
-        ax.text(pos[0], pos[1], textwrap.fill(txt, width=linewidth),
+        ax.text(pos[0], pos[1], txt,
                 style, **kwargs)
     return f
 
-
+@autoadd
 def add_image(img_path, pos, va='bottom', ha='left', transform=None, zoom=1):
     "Add image to the slide"
     def f(slide):
@@ -88,7 +107,7 @@ def parse_format_str(s):
     if s.count("i"):
         out['fontstyle'] = 'italic'
     number = "".join([c for c in s if c in '1234567890'])
-    if  number != '':
+    if number != '':
         out['fontsize'] = int(number)
     return out
 

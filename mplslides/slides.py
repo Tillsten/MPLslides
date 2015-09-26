@@ -5,17 +5,20 @@ Contains the slide classes
 import matplotlib.pyplot as plt
 import collections
 from styles import *
-from content import *
+import content
+from content import add_text
+
 class Slide(object):
     "Basic slide object"
     background_funcs = []
+    last_slide = None
     autoregister_pres = None
 
     def __init__(self, name=''):
         self.content = []
         if Slide.autoregister_pres is not None:
             Slide.autoregister_pres.add_slide(self)
-
+        content.last_slide = self
     def add_content(self, c):
         if not isinstance(c, collections.Iterable):
             c = [c]
@@ -47,18 +50,13 @@ class NormalSlide(Slide):
         super(NormalSlide, self).__init__(name=name)
         self.slide_title = slide_title
         self.slide_subtitle = slide_subtitle
-        self.left_content = []
-
-    def draw_foreground(self):
-        super(NormalSlide, self).draw_foreground()
-        xpos, ypos = layout['title.pos']
-        self.title = self.fig.text(xpos, ypos, self.slide_title,
-                                   big_title_style, va='bottom', ha='left')
+        self.add_content(add_text(self.slide_title, layout['title.pos'],
+                                  big_title_style, va='bottom', ha='left',
+                                  linewidth=layout["title.width"]))
         if self.slide_subtitle is not None:
-                    self.title = self.fig.text(xpos, ypos, self.slide_subtitle,
-                                   sub_title_style, va='top', ha='left')
-
-
+            self.add_content(add_text(self.slide_subtitle, layout['title.pos'],
+                                   sub_title_style, va='top', ha='left',
+                                   linewidth=layout["subtitle.width"]))
 
 
 class TitleSlide(Slide):

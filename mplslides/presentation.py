@@ -16,8 +16,8 @@ class Presentation(object):
         self.background = []
         self.slides = []
         self.current_slide = 0
-        pix_size = figure_settings['PIXEL_SIZE']
-        dpi = figure_settings['DPI']
+        pix_size = figure_settings['pixel_size']
+        dpi = figure_settings['dpi']
         size = pix_size[0]/dpi, pix_size[1]/dpi
         self.fig = plt.figure(num, figsize=size, facecolor=figure_settings['color'],
                               dpi=dpi)
