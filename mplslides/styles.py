@@ -5,7 +5,7 @@ Created on Sat Sep 19 18:26:43 2015
 @author: Tillsten
 """
 import matplotlib.pyplot as plt
-from cascadict import CascaDict
+from .utils import CascaDict
 
 
 
@@ -28,7 +28,7 @@ text_style.update({
 
 big_title_style = text_style.cascade()
 big_title_style.update({
-  'fontsize': 54,
+  'fontsize': 48,
   'fontweight': 'bold',
   'ha': 'center',
   'va': 'bottom'})
@@ -43,7 +43,7 @@ sub_title_style.update({
 
 enum_style = text_style.cascade()
 enum_style.update({
-  'fontsize': 30,
+  'fontsize': 26,
   'fontweight': 'normal',
   'ha': 'left',
   'va': 'top',
@@ -59,7 +59,7 @@ enum_char_style = {
   }
 
 layout = {
-  'title.pos': (0.05, 0.85),
+  'title.pos': (0.05, 0.88),
   'title.width': 35,
   'subtitle.width': 40,
   'bigtitle.pos': (0.5, 0.5),

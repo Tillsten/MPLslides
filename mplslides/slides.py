@@ -4,9 +4,8 @@ Contains the slide classes
 """
 import matplotlib.pyplot as plt
 import collections
-from styles import *
-import content
-from content import add_text
+from .styles import *
+from .content import text
 
 class Slide(object):
     "Basic slide object"
@@ -18,7 +17,8 @@ class Slide(object):
         self.content = []
         if Slide.autoregister_pres is not None:
             Slide.autoregister_pres.add_slide(self)
-        content.last_slide = self
+        Slide.last_slide = self
+
     def add_content(self, c):
         if not isinstance(c, collections.Iterable):
             c = [c]
@@ -34,7 +34,10 @@ class Slide(object):
 
     def draw(self):
         if not hasattr(self, 'fig'):
-            fsettings = dict(figsize=SIZE_INCH, facecolor=BACKGROUND, dpi=DPI)
+            pix_size = figure_settings['pixel_size']
+            dpi = figure_settings['dpi']
+            fsettings = dict(figsize=(pix_size[0]/dpi, pix_size[1]/dpi),
+                             facecolor=figure_settings['color'], dpi=dpi)
             self.fig = plt.figure(**fsettings)
         self.fig.clear()
         self.def_ax = self.fig.add_axes([0, 0, 1, 1])
@@ -50,13 +53,13 @@ class NormalSlide(Slide):
         super(NormalSlide, self).__init__(name=name)
         self.slide_title = slide_title
         self.slide_subtitle = slide_subtitle
-        self.add_content(add_text(self.slide_title, layout['title.pos'],
+        self.add_content(text(self.slide_title, layout['title.pos'],
                                   big_title_style, va='bottom', ha='left',
-                                  linewidth=layout["title.width"]))
+                                  linewidth=layout["title.width"], auto=0))
         if self.slide_subtitle is not None:
-            self.add_content(add_text(self.slide_subtitle, layout['title.pos'],
+            self.add_content(text(self.slide_subtitle, layout['title.pos'],
                                    sub_title_style, va='top', ha='left',
-                                   linewidth=layout["subtitle.width"]))
+                                   linewidth=layout["subtitle.width"], auto=0))
 
 
 class TitleSlide(Slide):
@@ -67,11 +70,11 @@ class TitleSlide(Slide):
         super(TitleSlide, self).__init__(name)
         self.title_text = title
         self.subtitle_text = subtitle
-        self.add_content(add_text(title, layout['bigtitle.pos'],
-                                  big_title_style, linewidth=35))
+        self.add_content(text(title, layout['bigtitle.pos'],
+                                  big_title_style, linewidth=35, auto=0))
         if subtitle is not None:
-            self.add_content(add_text(subtitle, layout['bigtitle.pos'],
-                                      sub_title_style, linewidth=50))
+            self.add_content(text(subtitle, layout['bigtitle.pos'],
+                                      sub_title_style, linewidth=50, auto=0))
 
 
 

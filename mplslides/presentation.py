@@ -2,7 +2,7 @@
 """
 Contains the presentation class.
 """
-from styles import *
+from .styles import *
 import matplotlib.pyplot as plt
 
 
@@ -34,12 +34,10 @@ class Presentation(object):
             if hasattr(last_slide, 'timer'):
                     last_slide.timer.stop()
         if event.key == 'right':
-
-
-            self.current_slide = (self.current_slide + 1)%len(self.slides)
+            self.current_slide = (self.current_slide + 1) % len(self.slides)
             self.draw()
         if event.key == 'left':
-            self.current_slide = (self.current_slide - 1)%len(self.slides)
+            self.current_slide = (self.current_slide - 1) % len(self.slides)
             self.draw()
 
     def draw(self):
