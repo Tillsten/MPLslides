@@ -29,14 +29,14 @@ class Presentation(object):
         self.slides.append(slide)
 
     def next_slide(self, event):
-        if event.key in ('left', 'right'):
+        if event.key in ('left', 'right', 'pageup', 'pagedown'):
             last_slide = self.slides[self.current_slide]
             if hasattr(last_slide, 'timer'):
                     last_slide.timer.stop()
-        if event.key == 'right':
+        if event.key in ('right', 'pagedown'):
             self.current_slide = (self.current_slide + 1) % len(self.slides)
             self.draw()
-        if event.key == 'left':
+        if event.key in ('left', 'pageup'):
             self.current_slide = (self.current_slide - 1) % len(self.slides)
             self.draw()
 
@@ -44,6 +44,9 @@ class Presentation(object):
         if len(self.slides) > 0:
             slide = self.slides[self.current_slide]
             slide.fig = self.fig
+            if hasattr(slide, 'timer'):
+                    slide.timer.stop()
+                    del slide.timer
             slide.background = self.background
             slide.draw()
             self.fig.canvas.draw()
