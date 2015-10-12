@@ -6,7 +6,6 @@ import numpy as np
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 
 from .styles import *
-from .utils import DocWrapper
 from functools import wraps
 
 class MyOffsetImage(OffsetImage):
@@ -29,10 +28,15 @@ def renderer():
     return plt.gcf().canvas.get_renderer()
 
 
-def axify(func, pos):
+def axify(func, pos, *args):
     def f(slide):
-        ax = slide.fig.add_axes(pos)
-        func(ax)
+        if len(args) > 0:
+            ax = slide.fig.add_axes(pos)
+            axs = [slide.fig.add_axes(i) for i in args]
+            func(ax, *axs)
+        else:
+            ax = slide.fig.add_axes(pos)
+            func(ax)
     return f
 
 
@@ -69,6 +73,7 @@ def listed_text(txt_list, pos, **kwargs):
     "Add an enumerated text to slide."
     linewidth = kwargs.pop('linewidth', layout['enum.linewidth'])
     enum = kwargs.pop('enumerate', False)
+    draw_sym = draw_list_number if enum else draw_list_symbol
 
     def f(slide):
         fig, ax = slide.fig, slide.def_ax
@@ -87,10 +92,9 @@ def listed_text(txt_list, pos, **kwargs):
                 my_style = enum_style
             aw = my_style.pop('autowrap', True)
             if aw:
-                print(txt)
                 txt = linewrap(txt, width=linewidth)
             if my_style.pop('enum', True):
-                draw_list_symbol(ax, x0, cur_y, i, my_style)
+                draw_sym(ax, x0, cur_y, i, my_style)
                 txi = xi
             else:
                 txi = 0
@@ -121,7 +125,7 @@ def image(img_path, pos, va='bottom', ha='left', transform=None, zoom=1):
         fig, ax = slide.fig, slide.def_ax
         image = plt.imread(img_path)
         w, h = image.shape[:2]
-        ob = MyOffsetImage(image, zoom=zoom, dpi_cor=0)
+        ob = MyOffsetImage(image, zoom=zoom, dpi_cor=1)
         xalign = dict(left=0, center=0.5, right=1)
         yalign = dict(bottom=0, center=0.5, top=1)
         a, b = xalign[ha], yalign[va]
