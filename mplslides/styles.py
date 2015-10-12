@@ -65,13 +65,13 @@ layout = {
   'bigtitle.pos': (0.5, 0.5),
   'content.top': 0.78,
   'content.bottom': 0.05,
-  'content.right': 0.9,
-  'content.left': 0.1,
+  'content.right': 0.94,
+  'content.left': 0.06,
   'content.hcenter': 0.5,
   'content.vcenter': 0.75/2.,
   'enum.offset': (0.01),
   'enum.y_adv': enum_char_style['fontsize']*0.95,
   'enum.indent': enum_char_style['fontsize']*4,
-  'enum.linewidth': 21
+  'enum.linewidth': 24
 
   }
