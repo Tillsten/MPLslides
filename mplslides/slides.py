@@ -3,9 +3,11 @@
 Contains the slide classes
 """
 import matplotlib.pyplot as plt
+import dill
 import collections
 from .styles import *
 from .content import text
+cache = {}
 
 class Slide(object):
     "Basic slide object"
@@ -18,6 +20,8 @@ class Slide(object):
         if Slide.autoregister_pres is not None:
             Slide.autoregister_pres.add_slide(self)
         Slide.last_slide = self
+        self._cached_size = (0, 0)
+
 
     def add_content(self, c):
         if not isinstance(c, collections.Iterable):
@@ -32,6 +36,9 @@ class Slide(object):
         for f in self.content:
             f(self)
 
+    def draw_animated(self):
+        pass
+
     def draw(self):
         if not hasattr(self, 'fig'):
             pix_size = figure_settings['pixel_size']
@@ -39,11 +46,23 @@ class Slide(object):
             fsettings = dict(figsize=(pix_size[0]/dpi, pix_size[1]/dpi),
                              facecolor=figure_settings['color'], dpi=dpi)
             self.fig = plt.figure(**fsettings)
-        self.fig.clear()
-        self.def_ax = self.fig.add_axes([0, 0, 1, 1])
-        self.def_ax.set_axis_off()
-        self.draw_background()
-        self.draw_foreground()
+
+        if self._cached_size != tuple(self.fig.get_size_inches()):
+            self.fig.clear()
+            self.def_ax = self.fig.add_axes([0, 0, 1, 1], 'def_ax')
+            self.def_ax.set_axis_off()
+            self.draw_background()
+            self.draw_foreground()
+            self.fig.canvas.draw()
+            self._picture = self.fig.canvas.copy_from_bbox(self.fig.bbox)
+            self._cached_size = tuple(self.fig.get_size_inches())
+            self.draw_animated()
+
+        else:
+            self.fig.canvas.restore_region(self._picture)
+            self.fig.canvas.blit()
+            self.fig.canvas.update()
+
 
 
 class NormalSlide(Slide):

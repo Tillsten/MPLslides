@@ -49,7 +49,7 @@ class Presentation(object):
                     del slide.timer
             slide.background = self.background
             slide.draw()
-            self.fig.canvas.draw()
+
 
     def to_pdf(self, fname):
         "Save as pdf"

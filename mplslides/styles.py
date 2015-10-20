@@ -72,6 +72,6 @@ layout = {
   'enum.offset': (0.01),
   'enum.y_adv': enum_char_style['fontsize']*0.95,
   'enum.indent': enum_char_style['fontsize']*4,
-  'enum.linewidth': 24
+  'enum.linewidth': 30
 
   }
